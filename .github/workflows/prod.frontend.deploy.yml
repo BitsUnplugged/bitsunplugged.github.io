@@ -27,10 +27,6 @@ jobs:
                   node-version: "20"
                   cache: npm
 
-            - name: Navigate to frontend folder
-              working-directory: ./frontend
-              run: echo "Using frontend folder as root"
-
             - name: Install dependencies
               working-directory: ./frontend
               run: npm install
