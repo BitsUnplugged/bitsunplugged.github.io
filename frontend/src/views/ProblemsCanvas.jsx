@@ -11,82 +11,86 @@ import "katex/dist/katex.css";
 import MarkdownPreview from "../components/Markdown/MarkdownPreview";
 import { useProblemContext } from "../store/ProblemContextProvider";
 import {
-  faCamera,
-  faCameraRetro,
-  faCode,
-  faObjectGroup,
-  faPlay,
-  faRotateRight,
+	faCamera,
+	faCameraRetro,
+	faCode,
+	faObjectGroup,
+	faPlay,
+	faRotateRight,
 } from "@fortawesome/free-solid-svg-icons";
 import html2canvas from "html2canvas";
 import { storageApi } from "api";
 import CanvasPreview from "pages/CanvasPreview";
 import StatementPreview from "components/StatementPreview";
 const Title = ({ problem }) => {
-  return (
-    <div className="flex max-w-screen-xl flex-col gap-3 py-4 sm:pt-12">
-      <div className="mt-4 md:mt-0">
-        <h2 className="text-left text-5xl font-extrabold tracking-tight ">
-          <span className="bu-text-title">{problem.title}</span>
-        </h2>
-      </div>
-      <span className="bu-text-subtitle text-xl">
-        {problem && problem.series
-          ? problem?.series?.topic?.name + " > " + problem?.series?.name
-          : ""}
-      </span>
-    </div>
-  );
+	return (
+		<div className="flex max-w-screen-xl flex-col gap-3 py-4 sm:pt-12">
+			<div className="mt-4 md:mt-0">
+				<h2 className="text-left text-5xl font-extrabold tracking-tight ">
+					<span className="bu-text-title">{problem.title}</span>
+				</h2>
+			</div>
+			<span className="bu-text-subtitle text-xl">
+				{problem && problem.series
+					? problem?.series?.topic?.name +
+						" > " +
+						problem?.series?.name
+					: ""}
+			</span>
+		</div>
+	);
 };
 
 const Header = ({ type }) => {
-  const navigate = useNavigate();
-  const { state: problem, dispatch } = useProblemContext();
-  return (
-    <div className="flex flex-row justify-between">
-      <Title problem={problem} />
-      {type != 0 ? (
-        <div className="flex items-center">
-          <Tooltip
-            title={<h1 className="text-lg text-white">Edit</h1>}
-            placement="top"
-            arrow
-            size="large"
-          >
-            <IconButton>
-              <div
-                data-tooltip-target="tooltip-default"
-                className="bu-text-primary flex cursor-pointer items-center text-4xl"
-                onClick={() => {
-                  setLoading(true);
-                  navigate(
-                    type == 2
-                      ? `/admin/problems/${problem.id}`
-                      : `/problems/${problem.id}/edit`
-                  );
-                }}
-              >
-                <FontAwesomeIcon icon={faPenToSquare} />
-              </div>
-            </IconButton>
-          </Tooltip>
-        </div>
-      ) : (
-        <div className="flex items-center">
-          <button
-            className="bu-button-primary rounded-lg px-7 py-3.5 text-center text-lg font-medium text-white"
-            onClick={() => {
-              setLoading(true);
-              console.log(problem);
-              navigate(`/submissions/${problem.id}`);
-            }}
-          >
-            <div className="flex flex-row items-center gap-4">SUBMISSIONS</div>
-          </button>
-        </div>
-      )}
-    </div>
-  );
+	const navigate = useNavigate();
+	const { state: problem, dispatch } = useProblemContext();
+	return (
+		<div className="flex flex-row justify-between">
+			<Title problem={problem} />
+			{type != 0 ? (
+				<div className="flex items-center">
+					<Tooltip
+						title={<h1 className="text-lg text-white">Edit</h1>}
+						placement="top"
+						arrow
+						size="large"
+					>
+						<IconButton>
+							<div
+								data-tooltip-target="tooltip-default"
+								className="bu-text-primary flex cursor-pointer items-center text-4xl"
+								onClick={() => {
+									setLoading(true);
+									navigate(
+										type == 2
+											? `/admin/problems/${problem.id}`
+											: `/problems/${problem.id}/edit`
+									);
+								}}
+							>
+								<FontAwesomeIcon icon={faPenToSquare} />
+							</div>
+						</IconButton>
+					</Tooltip>
+				</div>
+			) : (
+				<div className="flex items-center">
+					<button
+						className="bu-button-primary rounded-lg px-7 py-3.5 text-center text-lg font-medium text-white"
+						onClick={() => {
+							setLoading(true);
+							console.log(problem);
+							navigate(`/submissions/${problem.id}`);
+						}}
+					>
+						<div className="flex flex-row items-center gap-4">
+							SUBMISSIONS
+						</div>
+					</button>
+				</div>
+			)}
+		</div>
+	);
 };
 
 // const Statement = ({ colorMode }) => {
@@ -231,23 +235,28 @@ const Header = ({ type }) => {
 // });
 
 const ProblemsCanvasView = ({ onSubmit, onReset, colorMode, type }, ref) => {
-  const { state: problem, dispatch } = useProblemContext();
-  return (
-    <div>
-      {problem && (
-        <div className="flex flex-col gap-5">
-          <div>
-            <Header type={type} />
-            <StatementPreview
-              statement={problem.statement}
-              colorMode={colorMode}
-            />
-          </div>
-          <CanvasPreview ref={ref} onSubmit={onSubmit} takeSnapshot={true} />
-        </div>
-      )}
-    </div>
-  );
+	const { state: problem, dispatch } = useProblemContext();
+	return (
+		<div>
+			{problem && (
+				<div className="flex flex-col gap-5">
+					<div>
+						<Header type={type} />
+						<StatementPreview
+							statement={problem.statement}
+							colorMode={colorMode}
+						/>
+					</div>
+					<CanvasPreview
+						ref={ref}
+						onSubmit={onSubmit}
+						takeSnapshot={true}
+						giveHint={true}
+					/>
+				</div>
+			)}
+		</div>
+	);
 };
 
 export default forwardRef(ProblemsCanvasView);
